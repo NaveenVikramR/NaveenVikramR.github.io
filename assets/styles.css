@@ -119,7 +119,8 @@ img { max-width: 100%; }
   transition: border-color 0.3s var(--ease);
 }
 .bar.is-scrolled { border-bottom-color: var(--line); }
-.bar__inner { display: flex; align-items: center; gap: 16px; height: 60px; }
+.bar__inner { display: flex; flex-wrap: wrap; align-items: center; column-gap: 16px; row-gap: 0; }
+.logo, .bar__actions { height: 60px; }
 .logo {
   font-family: var(--font-body);
   font-weight: 600;
@@ -129,16 +130,29 @@ img { max-width: 100%; }
   display: inline-flex; align-items: center; gap: 8px;
 }
 .logo__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-.nav { display: none; gap: 4px; margin-left: auto; }
+/* Section tabs: a swipeable row under the logo on phones, inline in the bar on laptops */
+.nav {
+  order: 3; flex: 1 0 100%; display: flex; gap: 6px;
+  overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  padding: 2px 0 12px; margin-top: -6px;
+  mask-image: linear-gradient(90deg, #000 85%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
+}
+.nav::-webkit-scrollbar { display: none; }
 .nav a {
   text-decoration: none; font-size: 0.9rem; color: var(--muted);
   padding: 6px 12px; border-radius: 999px;
   transition: color 0.2s, background-color 0.2s;
 }
-.nav a:hover, .nav a.is-active { color: var(--ink); background: var(--surface); }
-.bar__actions { display: flex; gap: 8px; margin-left: auto; }
+.nav a { flex: none; border: 1px solid var(--line); }
+.nav a:hover { color: var(--ink); background: var(--surface); }
+.nav a.is-active { color: var(--bg); background: var(--ink); border-color: var(--ink); }
+.bar__actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
 @media (min-width: 860px) {
-  .nav { display: flex; }
+  .bar__inner { flex-wrap: nowrap; }
+  .nav { order: 0; flex: none; margin: 0 0 0 auto; padding: 0; gap: 4px; overflow: visible; mask-image: none; -webkit-mask-image: none; }
+  .nav a { border-color: transparent; }
+  .nav a.is-active { color: var(--ink); background: var(--surface); border-color: var(--line); }
   .bar__actions { margin-left: 8px; }
 }
 .icon-btn {
@@ -231,7 +245,9 @@ img { max-width: 100%; }
 .stat__label { color: var(--muted); font-size: 0.85rem; }
 
 /* ── Sections ─────────────────────────────────────────────── */
-.section { padding-block: clamp(64px, 9vw, 120px) 0; scroll-margin-top: 64px; }
+.section, .contact, .hero { scroll-margin-top: 112px; }
+@media (min-width: 860px) { .section, .contact, .hero { scroll-margin-top: 68px; } }
+.section { padding-block: clamp(64px, 9vw, 120px) 0; }
 .section__head {
   display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between;
   gap: 16px; margin-bottom: clamp(24px, 4vw, 40px);
@@ -251,6 +267,26 @@ img { max-width: 100%; }
 /* ── Featured ─────────────────────────────────────────────── */
 .featured { display: grid; gap: 16px; }
 @media (min-width: 860px) { .featured { grid-template-columns: 1fr 1fr; } }
+/* Phones: the four cards become one swipe row instead of a tall stack */
+@media (max-width: 859px) {
+  .featured {
+    grid-auto-flow: column; grid-auto-columns: min(86%, 440px);
+    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+    scrollbar-width: none; padding-bottom: 4px;
+  }
+  .featured::-webkit-scrollbar { display: none; }
+  .feature { scroll-snap-align: start; }
+  .feature:hover { transform: none; }
+}
+.swipe { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; }
+@media (min-width: 860px) { .swipe { display: none; } }
+.dots { display: flex; gap: 8px; }
+.dots button {
+  all: unset; cursor: pointer; width: 8px; height: 8px; border-radius: 999px; background: var(--line);
+  transition: width 0.3s var(--ease), background-color 0.3s;
+}
+.dots button[aria-current="true"] { width: 22px; background: var(--accent); }
+.dots button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .feature {
   position: relative; display: flex; flex-direction: column; gap: 20px;
   padding: clamp(22px, 3vw, 32px);

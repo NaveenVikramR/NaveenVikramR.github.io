@@ -113,6 +113,22 @@
     });
   });
 
+  /* Phone swipe row for featured cards: dots + position */
+  const featuredEl = $("#featured");
+  const cards = $$(".feature", featuredEl);
+  $("#featured-dots").innerHTML = cards.map((c, i) => `<button type="button" aria-label="Show ${esc($(".feature__name", c).textContent)}" aria-current="${i === 0}"></button>`).join("");
+  const dots = $$("#featured-dots button");
+  const step = () => (cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : 1);
+  let curCard = 0;
+  featuredEl.addEventListener("scroll", () => {
+    const i = Math.max(0, Math.min(cards.length - 1, Math.round(featuredEl.scrollLeft / step())));
+    if (i === curCard) return;
+    curCard = i;
+    dots.forEach((d, k) => d.setAttribute("aria-current", String(k === i)));
+    $("#featured-pos").textContent = `${i + 1} / ${cards.length} · swipe`;
+  }, { passive: true });
+  dots.forEach((d, i) => d.addEventListener("click", () => featuredEl.scrollTo({ left: i * step(), behavior: reduced ? "auto" : "smooth" })));
+
   /* ── Index ─────────────────────────────────────────────── */
   const sorted = [...projects].sort((a, b) => b.pushed.localeCompare(a.pushed));
   const linkButtons = (p) => {
@@ -310,7 +326,15 @@
     const links = $$(".nav a");
     const io = new IntersectionObserver(
       (entries) => entries.forEach((en) => {
-        if (en.isIntersecting) links.forEach((l) => l.classList.toggle("is-active", l.getAttribute("href") === `#${en.target.id}`));
+        if (!en.isIntersecting) return;
+        const nav = $(".nav");
+        links.forEach((l) => {
+          const on = l.getAttribute("href") === `#${en.target.id}`;
+          l.classList.toggle("is-active", on);
+          l.setAttribute("aria-current", on ? "true" : "false");
+          // keep the active tab visible in the phone's swipe row
+          if (on && nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: l.offsetLeft - nav.clientWidth / 2 + l.offsetWidth / 2, behavior: reduced ? "auto" : "smooth" });
+        });
       }),
       { rootMargin: "-45% 0px -50% 0px" }
     );
