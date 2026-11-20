@@ -39,7 +39,7 @@ The site is static, so hosting is free on all of the options below. **Recommende
 - [ ] Confirm the `status` line ("Open to roles & collaborations")
 - [ ] Add the site URL to your GitHub profile (Edit profile → Website) and LinkedIn
 - [ ] Pin your four featured repos on your GitHub profile so the two match
-- [ ] Optional: add a 1200×630 `og.png` and `<meta property="og:image">` for nicer link previews
+- [x] Social preview image (`assets/og.png`) and tags added
 - [ ] Optional: privacy-friendly analytics (GoatCounter or Cloudflare Web Analytics, both free, no cookies)
 
 ## Keeping it fresh
