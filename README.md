@@ -38,3 +38,11 @@ Then open http://localhost:8000.
 - "Latest commit" from GitHub
 - Writing section: baked posts + newest dev.to posts loaded live
 - Respects `prefers-reduced-motion`; keyboard accessible; no trackers
+
+## Cache busting
+
+`index.html` loads `styles.css`, `data.js` and `app.js` with a `?v=` tag so visitors get fresh files after each update. After editing any of them, refresh the tags:
+
+```bash
+python3 -c "import hashlib,re;h=open('index.html').read();[h:=re.sub(re.escape(f)+r'(\?v=[0-9a-f]+)?\"',f+'?v='+hashlib.sha1(open(f,'rb').read()).hexdigest()[:8]+'\"',h) for f in ['assets/styles.css','assets/data.js','assets/app.js']];open('index.html','w').write(h)"
+```
