@@ -156,6 +156,14 @@ window.PORTFOLIO = {
     mirror: { label: "Medium", url: "https://medium.com/@naveenvikram27" },
     posts: [
       {
+        title: "Forget the AI Bubble: Anthropic's IPO Is a Bet on Customers",
+        url: "https://dev.to/naveen_vikram_4022af2f49a/forget-the-ai-bubble-anthropics-ipo-is-a-bet-on-customers-4806",
+        date: "2026-11-20",
+        minutes: 4,
+        tags: ["ai", "anthropic", "startups"],
+        blurb: "Every few weeks a headline says the AI bubble is about to burst. Then Anthropic went public.",
+      },
+      {
         title: "Nightshift: voice on-call and security copilot for Alexa+",
         url: "https://dev.to/naveen_vikram_4022af2f49a/nightshift-voice-on-call-and-security-copilot-for-alexa-2k63",
         date: "2026-10-23",
